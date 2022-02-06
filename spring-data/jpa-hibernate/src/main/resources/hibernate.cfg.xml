@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <!-- ref: https://openhome.cc/Gossip/HibernateGossip/ConfigFile.html -->
+    <session-factory>
+        <!-- JDBC 驅動程式 -->
+        <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+        <!-- JDBC URL -->
+        <property name="connection.url">jdbc:mysql://localhost/spring-data-jpa_tuling</property>
+        <!-- 資料庫使用者 -->
+        <property name="connection.username">root</property>
+        <!-- 資料庫密碼 -->
+        <property name="connection.password">P@ssw0rd</property>
+
+        <!-- 顯示實際操作資料庫時的SQL，預設 false -->
+        <property name="show_sql">true</property>
+        <!-- 將顯示的SQL排版，方便觀看，預設 false -->
+        <property name="format_sql">true</property>
+        <!--
+             表生成策略
+             none: 默認，不自動生成
+             update: 如果沒有表會創建，有會檢查更新(根據 POJO 類)
+             create: 創建 (不管三七二十一，每次運行都重創)
+        -->
+        <property name="hbm2ddl.auto">update</property>
+        <!-- SQL方言，選擇數據庫類型(這邊設定的是MySQL) -->
+        <!-- 需要根據安裝的 DB 與版本選擇 class，否則產生的 SQL 語句有可能無法執行 -->
+        <property name="dialect">org.hibernate.dialect.MySQL57Dialect</property>
+
+        <!-- 物件與資料庫表格映射文件 -->
+<!--        <mapping resource="onlyfun/caterpillar/User.hbm.xml"/>-->
+        <!-- 映射方式: 指定那些 POJO 需要進行 ORM 映射 -->
+        <mapping class="org.example.pojo.Customer"></mapping>
+        <!-- 下面設定透過註解取代 -->
+<!--        <mapping resource=""></mapping>-->
+    </session-factory>
+
+</hibernate-configuration>
