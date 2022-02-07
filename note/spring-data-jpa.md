@@ -225,3 +225,46 @@ TODO: 所以 JPA/Hibernate 將物件狀態設計成這樣的邏輯主要考量�
 
 
 
+## Lec 10、Spring Data JPA 介紹
+
+> 正式進入主軸，前 9 講屬於開胃菜(先備知識)
+
+
+
+https://spring.io/projects/spring-data-jpa
+
+Spring Data JPA, part of the larger Spring Data family, makes it easy to easily implement JPA based repositories. This module deals with enhanced support for JPA based data access layers. It makes it easier to build Spring-powered applications that use data access technologies.
+
+Implementing a data access layer of an application has been cumbersome for quite a while. Too much boilerplate code has to be written to execute simple queries as well as perform pagination, and auditing. **Spring Data JPA aims to significantly improve the implementation of data access layers by reducing the effort to the amount that’s actually needed.** (Spring Data JPA 旨在改進數據訪問層的實現以提升開發效率) As a developer you write your repository interfaces, including custom finder methods, and Spring will provide the implementation automatically.
+
+
+
+更簡單地說,
+
+- Spring Data JPA 是 Spring 提供的一套框架，用來簡化 JPA 的開發 (例如不需再重複撰寫 entityManager 創建、 transaction commit 等代碼)。
+- 依照約定好的規則進行 方法命名 去寫 DAO 層接口則可以不寫實現數據庫的訪問與操作。(https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.query-methods)
+- 提供除了 CRUD 以外的功能，如分頁、排序、複雜查詢等等
+- 讓我們解脫了 DAO 層的操作，基本上所有 CRUD 都可以依賴它來實現。實際的開發中推薦使用 Spring Data JPA + ORM (如 Hibernate) ，未來若切換不同 ORM 框架也更方便，且對數據庫層的操作也更簡單，易於解耦。
+
+
+
+### Features
+
+- Sophisticated support to build repositories based on Spring and JPA
+- Support for [Querydsl](http://www.querydsl.com/) predicates and thus type-safe JPA queries
+- Transparent auditing of domain class
+- Pagination support, dynamic query execution, ability to integrate custom data access code
+- Validation of `@Query` annotated queries at bootstrap time
+- Support for XML based entity mapping
+- JavaConfig based repository configuration by introducing `@EnableJpaRepositories`.
+
+
+
+上述特性講起來其實有點囉嗦，有些實際感受過才能體會，簡單來說就是 Spring Data JPA 極大地簡化了 DAO 層的代碼，我們只需要寫接口就**自動**具有了 CRUD、分頁查詢等方法，牛逼!
+
+
+
+> Spring Data JPA 本質是利用了 JDK 的動態代理將 原生  JPA 包了一層而已
+>
+> > 如果動態代理是什麼不懂的話，最好額外自行去補充一下這種基礎知識!!!
+
