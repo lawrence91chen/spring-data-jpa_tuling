@@ -1,0 +1,40 @@
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence
+                                 http://xmlns.jcp.org/xml/ns/persistence/persistence_2_1.xsd"
+             version="2.1">
+
+    <persistence-unit name="hibernateJPA" transaction-type="RESOURCE_LOCAL">
+        <!-- jpa 的實現方式 -->
+        <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <!-- 需要進行 ORM 映射的 POJO 類 -->
+        <class>org.example.pojo.Customer</class>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/spring-data-jpa_tuling" />
+            <property name="javax.persistence.jdbc.user" value="root" />
+            <property name="javax.persistence.jdbc.password" value="P@ssw0rd" />
+
+            <property name="hibernate.show_sql" value="true" />
+            <property name="hibernate.hbm2ddl.auto" value="update" />
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL57Dialect" />
+
+        </properties>
+    </persistence-unit>
+
+    <!-- 用於演示 JPA 實現類切換 -->
+    <persistence-unit name="openjpa" transaction-type="RESOURCE_LOCAL">
+        <provider>org.apache.openjpa.persistence.PersistenceProviderImpl</provider>
+        <class>org.example.pojo.Customer</class>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="com.mysql.jdbc.Driver" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:mysql://localhost:3306/spring-data-jpa_tuling" />
+            <property name="javax.persistence.jdbc.user" value="root" />
+            <property name="javax.persistence.jdbc.password" value="P@ssw0rd" />
+
+            <!-- 可以自動生成數據庫表 (openjpa 獨有配置) -->
+            <property name="openjpa.jdbc.SynchronizeMappings" value="buildSchema(ForeignKeys=true)" />
+        </properties>
+    </persistence-unit>
+
+</persistence>

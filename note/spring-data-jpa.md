@@ -2,6 +2,14 @@
 
 
 
+## Idea
+
+- .var: assign variable
+- .new: new instance
+- sout: system out
+
+
+
 ## Lec 04、JPA 的介紹及 JDBC 的關係
 
 - JDBC 和 JPA 都是一種規範，JDBC 由各個關聯式資料庫(MySQL、Oracle、...) 來實現，也就是開發時所引入的 driver jar 檔
@@ -124,3 +132,44 @@ Process finished with exit code 0
   - 詳細可參考 Hibernate 官網文件
     - 文件內 `[]` 中括號的意思表示可寫可不寫
   - Spring Data JPA 也可以使用 HQL。
+
+
+
+## Lec 08、基於 JPA 數據庫持久化操作
+
+- 將 SSH 中的 Hibernate 替換成 JPA，有利於未來 實現類的切換
+
+- 如果有接觸到 Spring Data JPA 的源碼，就會看到 EntityManager、Persistence 等 JPA API 的操作
+
+  若實際運行會發現這些 API 底層實現也還是 Hibernate
+
+- JPA 未提供單獨的 update 方法，想硬性規定只做 update 要自己寫 JPQL
+
+  insert 的話要看 JPA 的實現類是否支持 (Hibernate 支持)
+
+- 若真的有實際業務場景必須寫 SQL 也是可以的
+
+- 無法刪除游離狀態的實例 (涉及 JPA 對象四大狀態觀念)，只能刪除持久化狀態的對象 (必須從數據庫里查出來的才是持久化對象)
+
+  ```java
+  ...
+  Customer customer = new Customer();
+  customer.setCustId(5L);
+  
+  entityManager.remove(customer);
+  ...
+  
+  java.lang.IllegalArgumentException: Removing a detached instance org.example.pojo.Customer#5
+  ```
+
+  只能先查再刪的話，否則要寫 JPQL
+
+  ```
+  ...
+  Customer customer = entityManager.find(Customer.class, 5L);
+  entityManager.remove(customer);
+  ...
+  ```
+
+
+
