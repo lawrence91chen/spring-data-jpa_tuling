@@ -130,4 +130,73 @@ public class JpaTest {
 
 		transaction.commit();
 	}
+
+	@Test
+	public void testEntityState() {
+		EntityManager entityManager = factory.createEntityManager();
+
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+
+		Customer customer = new Customer(); //  臨時狀態(瞬時狀態)
+		customer.setCustId(5L); // 游離狀態
+		customer = entityManager.find(Customer.class, 5L); // 持久狀態
+		entityManager.remove(customer); // 刪除狀態(銷毀狀態)
+
+		transaction.commit();
+	}
+
+	@Test
+	public void testEntityState2() {
+		EntityManager entityManager = factory.createEntityManager();
+
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+
+		Customer customer = entityManager.find(Customer.class, 1L); // 持久狀態
+		// 持久狀態進行修改會同步數據庫
+		customer.setCustName("徐庶徐庶徐庶");
+
+		// 持久狀態下即使未呼叫 merge 之類的 API，一旦事務提交，仍然會執行 UPDATE
+		transaction.commit();
+	}
+
+	@Test
+	public void testEntityState3() {
+		EntityManager entityManager = factory.createEntityManager();
+
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+
+		// 注意: 實際上只會執行一條 SQL SELECT，和直觀理解 (SELECT -> DELETE -> INSERT) 不同!
+		Customer customer = entityManager.find(Customer.class, 1L); // 持久狀態
+		entityManager.remove(customer);
+		// 對 removed 狀態的實體執行 persist 會回歸 managed 狀態
+		entityManager.persist(customer);
+		transaction.commit();
+	}
+
+	@Test
+	public void testCacheI() {
+		EntityManager entityManager = factory.createEntityManager();
+
+		EntityTransaction transaction = entityManager.getTransaction();
+		transaction.begin();
+
+		// 只會執行一條 SQL SELECT
+		Customer customer = entityManager.find(Customer.class, 1L);
+		Customer customer2 = entityManager.find(Customer.class, 1L);
+
+		transaction.commit();
+
+
+		EntityManager entityManager2 = factory.createEntityManager();
+
+		transaction.begin();
+
+		// 會執行另外一條 SQL SELECT
+		Customer customer3 = entityManager2.find(Customer.class, 1L);
+
+		transaction.commit();
+	}
 }

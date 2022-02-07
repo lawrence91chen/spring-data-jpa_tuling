@@ -173,3 +173,55 @@ Process finished with exit code 0
 
 
 
+## Lec 09、JPA 對象的四種狀態和緩存
+
+TODO: 所以 JPA/Hibernate 將物件狀態設計成這樣的邏輯主要考量為何? 優勢在哪?
+
+
+
+> Spring Data JPA 是在 JPA 的基礎上進行實現，如果項目開發中不了解 JPA 的這些特性。很容易陷入莫名奇妙更新數據庫或不更新數據庫等問題。
+
+
+
+### JPA 對象的四種狀態
+
+> **JPA entity lifecycle**: 
+>
+> - [JPA Entity lifecycle – JPA developer should know](https://javabydeveloper.com/jpa-entity-lifecycle-jpa-developer-should-know/)
+> - https://matthung0807.blogspot.com/2018/06/hibernate-jpa-entity-jpa-entity.html
+> - https://blog.csdn.net/yingxiake/article/details/50968059
+
+![image-20220207134928372](spring-data-jpa.assets/jpa-entity-lifecycle.png)
+
+- 臨時狀態: 剛創建(new)出來，尚未與 entityManager 發生關係，沒有被持久話，不在 entityManager 中的對象
+
+- 持久狀態: 與 entityManager 發生關係，已經被持久化，可以把持久化狀態視為實實在在的數據庫記錄 (若對數據庫記錄修改則會進行同步)
+
+  > 持久狀態下即使未呼叫 merge 之類的 API，一旦事務提交，仍然會執行 UPDATE
+  >
+  > 所以這也是我們必須好好理解這四種狀態關係的原因
+
+- 刪除狀態: 執行 remove 方法，事務提交之前
+
+- 游離狀態: 事務 commit 到數據庫後實體的狀態。因為事務已經提交了，此時實體的屬性改變也不會同步到數據庫。游離是沒人管的孩子，不在持久化上下文中。
+
+  - 也就是說即使對象在數據庫中有對應的資料，但如果沒有和 entityManager 產生關聯，那就是一個游離狀態。
+
+
+
+### JPA 緩存
+
+- 基本上就是 Hibernate 緩存，因為是由 Hibernate 來實現的
+
+  - 一級緩存: 同一個 entityManager 對象底下，同樣的查詢只會查一次 DB。也就是查完第一次 DB 之後都從緩存中獲取數據。
+
+  - 二級緩存: 屬於應用級別，那怕是不同 entityManager 也只會查一次。後面一樣從緩存取得
+
+  - 詳細不介紹，需要另外再深入去看 Hibernate。
+
+    二級緩存一般不太會用到。
+
+    一級緩存則需要知道一下，因為用不用不是你來決定XD 只要你在同一個 entityManager 下進行相同查詢默認就會用到
+
+
+
