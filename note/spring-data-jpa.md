@@ -438,8 +438,29 @@ void deleteAll();
     - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#appendix.query.method.predicate
   - 再怎麼樣支持的條件和主題都是有限的，所以透過規定方法名來執行持久化操作只能做一些默認、簡單的 CRUD，尚不足以滿足實務需求。
 
+## Lec 17、自定義操作 - Query By Example
+
+> 前兩講的做法都不能實現動態條件查詢
+>
+> Query By Example、Specifications、Querydsl 三種方式可以實現
+>
+> 然而三者皆有各自的應用場景與限制，沒有完美的QQ
+
 - Query By Example
+  - 只能實現一些簡單的查詢
+  - 只支持查詢
+    - 不支持嵌套或分組的屬性約束，如 firstname=?0 OR (firstname=?1 AND firstname=?2)
+    - **只支持字串** start/contains/ends/regex 匹配和其他屬性類型的精確匹配
+      - 例如有日期範圍的查詢就不能用
+      - 如果所有動態條件都只是字串，可使用 Query By Example
+  - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#query-by-example
+  - 條件匹配器: https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#query-by-example.matchers
+    - ExampleMatcher 中定義許多靜態方法，可以對條件進行一些行為上的設置，例如 with 開頭的
+
+- interface MatcherConfiguer<T>... 
+  - interface 如果只有一個方法通常稱為函數接口，可以結合 java 8 lamda expression 使用
+
+
 
 - 通過 Specifications
-
 - 通過 Querydsl
