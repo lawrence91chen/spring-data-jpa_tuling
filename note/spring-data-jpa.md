@@ -424,9 +424,19 @@ void deleteAll();
 
         https://docs.jboss.org/hibernate/stable/orm/userguide/html_single/Hibernate_User_Guide.html#hql-insert
 
-        
+## Lec 16、自定義操作 - 規定方法名
 
 - 規定方法名
+
+  - 支持的查詢方法 - 主題關鍵字(前綴) / Supported query method subject keywords
+    - 只有查詢和刪除
+    - 決定當前方法作用
+    - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repository-query-keywords
+
+  - 支持的查詢方法 - 謂詞關鍵字和修飾符 / Supported query method predicate keywords and modifiers
+    - 決定查詢條件
+    - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#appendix.query.method.predicate
+  - 再怎麼樣支持的條件和主題都是有限的，所以透過規定方法名來執行持久化操作只能做一些默認、簡單的 CRUD，尚不足以滿足實務需求。
 
 - Query By Example
 
