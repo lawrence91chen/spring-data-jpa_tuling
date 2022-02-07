@@ -33,7 +33,7 @@
     <!--  數據源  -->
     <bean class="com.alibaba.druid.pool.DruidDataSource" name="dataSource">
         <property name="url" value="jdbc:mysql://localhost/spring-data-jpa_tuling"/>
-        <property name="driver" value="com.mysql.jdbc.Driver"/>
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
         <property name="username" value="root"/>
         <property name="password" value="P@ssw0rd"/>
     </bean>
