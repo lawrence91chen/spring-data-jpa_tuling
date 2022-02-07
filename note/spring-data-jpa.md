@@ -7,6 +7,12 @@
 - .var: assign variable
 - .new: new instance
 - sout: system out
+- 右方 Maven Tab 可以看各個專案的依賴關係
+- ctrl + alt + L: auto format
+- alt + / : Code completion
+- ctrl + shift + space : code suggestion
+  - some completion may not be provided on Community Edition
+- ctrl + /: comment
 
 
 
@@ -267,4 +273,52 @@ Implementing a data access layer of an application has been cumbersome for quite
 > Spring Data JPA 本質是利用了 JDK 的動態代理將 原生  JPA 包了一層而已
 >
 > > 如果動態代理是什麼不懂的話，最好額外自行去補充一下這種基礎知識!!!
+> >
+> > - https://www.gushiciku.cn/pl/glln/zh-tw
+> > - https://www.liaoxuefeng.com/wiki/1252599548343744/1264804593397984
 
+
+
+TODO: 架構圖
+
+
+
+## Lec 11、Spring data JPA 搭建 XML 的配置方式
+
+> 不建議直接創建 spring boot 項目來學習 Spring data，因為 spring boot 的自動配置類會幫你做好很多 Bean 的配置，我們會不知道到底 Spring data 需要配置那些 Bean，你會成為一個傻瓜式的 spring boot programmer
+>
+> P.S. 一定要知道 spring boot 幫我們配置了什麼，以後才能在 spring boot 的基礎上進行擴展。如果這些都不知道要談何擴展，更別說要去看懂它底層的一些源碼了。
+>
+> 自己去配置一遍，才能熟悉整體的體系，對未來才有實質幫助。
+
+
+
+- 參照官方說明(https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#dependencies)添加依賴
+
+  使用 spring-data-bom 統一管理所有 spring-data 子項目的版本可以避免未來一些版本衝突。
+
+- 純 spring-data 項目要另外添加 Hibernate 依賴，Spring boot 默認 JPA 實現才是 Hibernate
+
+- spring-test: 整合 Spring 項目的單元測試
+
+- 連接池: 管理 Data Source、druid: 德魯伊
+
+  - https://blog.csdn.net/hailongcsdn/article/details/106223821
+    - 什麼是連接池？
+      連接池是一種創建和管理連接的緩衝池技術，這些連接已經準備好被其他的線程進行調用。
+    - 那為什麼要使用連接池呢？
+      我們知道，連接的創建和銷毀時需要時間的，而連接池就是在服務器初始化的時候，創建好一些連接，然後把它們放到內存中的連接池裡，使用的時候，可以直接從內存中獲取。使用完成又歸還給連接池。這樣從內存中獲取和歸還連接的效率，遠遠高高每次連接的創建和銷毀，**大大提高了服務器的性能**，所以使用連接池是很用必要的。
+  - https://www.gushiciku.cn/pl/gb9z/zh-tw
+  - https://kknews.cc/zh-tw/code/nlr2k93.html
+
+- 使用 XML 配置 spring
+
+  - 官網的配置說明
+    - 使用 XML https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.namespace
+    - 使用 Java Config https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#jpa.java-config
+  - https://www.itread01.com/content/1549220976.html
+  - JPA 整合 Spring 概念是把 JPA 基本的 API (例如 EntityManagerFactory) 交給 Spring 來管理
+
+
+
+> 要會使用 一手資料(官方文檔) 來學習，而非 二手資料 (別人再整理過的)，因為官方始終會更新

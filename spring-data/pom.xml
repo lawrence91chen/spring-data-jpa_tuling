@@ -9,12 +9,27 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>jpa-hibernate</module>
+        <module>01-jpa-hibernate</module>
+        <module>02-spring-data-jpa</module>
     </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
+
+    <!-- 這種寫法可以繼承多個。有別於 <parent></parent> 在於 parent 只能繼承一個-->
+    <!-- 用來統一管理 Spring Data 子項目的版本 -->
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.data</groupId>
+                <artifactId>spring-data-bom</artifactId>
+                <version>2021.1.1</version>
+                <scope>import</scope>
+                <type>pom</type>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 
 </project>
