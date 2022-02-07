@@ -327,5 +327,65 @@ TODO: 架構圖
 
 ## Lec 13、Spring data JPA 的 Java Config 配置方式
 
+## Lec 14、使用 Spring data Repositories
 
+- XML 和 Java Config 使用上擇一即可。
 
+  Spring boot 幾乎全是 Java Config 且據說 Spring 6 會捨棄 XML 配置方式。
+
+  兩種配置方式基本上都要掌握，因為一般公司還是有一些 SSM 項目會用到 XML 配置，
+
+  若不太懂 Java Config 可以去找老師的 Spring 課程。
+
+- 雖然 Spring boot 會自動幫你配好，但還是建議自己配一遍，到時候使用 Spring boot 或看源碼都會加清晰。
+
+  
+
+Spring data Repository 抽象的目標是顯著減少各種持久性存儲實現數據訪問層所需的樣板代碼量
+
+### CrudRepository
+
+```java
+// 用來插入和修改，有主鍵就是修改 沒有就是新增
+// 根據返回值獲取插入後的自增ID
+<S extends T> S save(S entity);
+
+// 通過集合保存多個實體
+<S extends T> Iterable<S> saveAll(Iterable<S> entities);
+
+// 通過主鍵查詢實體。 泛型 ID 就是繼承 CrudRepository 時給定的主鍵類別
+Optional<T> findById(ID id);
+
+// 通過主鍵查詢是否存在，返回 boolean
+boolean existsById(ID id);
+
+// 查詢所有
+Iterable<T> findAll();
+
+// 通過集合主鍵查詢多個實體，返回集合
+Iterable<T> findAllById(Iterable<ID> ids);
+
+// 查詢總數量
+long count();
+
+// 根據 ID 進行刪除
+void deleteById(ID id);
+
+// 根據 實體 進行刪除
+void delete(T entity);
+
+// 依 ID 刪除多個
+void deleteAllById(Iterable<? extends ID> ids);
+
+// 依 實體 刪除多個
+void deleteAll(Iterable<? extends T> entities);
+
+// 刪除全部
+void deleteAll();
+```
+
+### PagingAndSortingRepository
+
+具有分頁和排序的能力
+
+- using the type-safe API: https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.paging-and-sorting

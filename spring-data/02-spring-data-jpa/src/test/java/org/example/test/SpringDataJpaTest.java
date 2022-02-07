@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+import java.util.Arrays;
 import java.util.Optional;
 
 // 基於 Junit4 spring 單元測試，否則無法使用 Spring DI (@Autowired) 進行測試
@@ -17,6 +18,7 @@ import java.util.Optional;
 @ContextConfiguration(classes = SpringDataJpaConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 public class SpringDataJpaTest {
+	/** JDK 動態代理的實例。 */
 	@Autowired
 	CustomerRepository customerRepository;
 
@@ -32,6 +34,8 @@ public class SpringDataJpaTest {
 		Customer customer = new Customer();
 		customer.setCustName("小六");
 		customerRepository.save(customer);
+
+		System.out.println(customer);
 	}
 
 	@Test
@@ -49,5 +53,11 @@ public class SpringDataJpaTest {
 		customer.setCustId(3L);
 		// spring data JPA 底層會先查再刪，(因為查完就會是持久狀態)所以不會有不能刪 detached instance 的問題
 		customerRepository.delete(customer);
+	}
+
+	@Test
+	public void testFindAll() {
+		Iterable<Customer> customers = customerRepository.findAllById(Arrays.asList(1L, 2L, 5L));
+		System.out.println(customers);
 	}
 }
