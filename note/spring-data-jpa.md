@@ -389,3 +389,47 @@ void deleteAll();
 具有分頁和排序的能力
 
 - using the type-safe API: https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#repositories.paging-and-sorting
+
+
+
+## Lec 15、自定義操作 - JPQL 和 SQL
+
+> Idea 插件 JPA Buddy 可提示 JPQL
+
+- JPQL (原生 SQL)
+
+  - @Query
+
+    - 查詢如果返回單個實體用 POJO 接收，如果是多個需要通過集合
+
+    - 參數設置方式
+
+      - 索引 `?數字`
+      - 具名 `:參數名`，結合 @Param 註解指定參數名稱
+
+    - 增刪改
+
+      - 要加上事務的支持
+
+        ```java
+        // 通常在 Service 層聲明
+        @Transactional
+        // 通知 Spring Data JPA 是 `增刪改` 的操作
+        @Modifying
+        ```
+
+      - 如果是插入方法，一定只能在 Hibernate 下才支持
+
+        JPQL 本身不支持新增，但 Hibernate 的實現支持一種偽新增 (INSERT INTO SELECT ...)
+
+        https://docs.jboss.org/hibernate/stable/orm/userguide/html_single/Hibernate_User_Guide.html#hql-insert
+
+        
+
+- 規定方法名
+
+- Query By Example
+
+- 通過 Specifications
+
+- 通過 Querydsl
