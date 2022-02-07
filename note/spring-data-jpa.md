@@ -323,7 +323,9 @@ TODO: 架構圖
 
 > 要會使用 一手資料(官方文檔) 來學習，而非 二手資料 (別人再整理過的)，因為官方始終會更新
 
-
-
 ## Lec 12、Spring data JPA 的 CRUD 測試
+
+## Lec 13、Spring data JPA 的 Java Config 配置方式
+
+
 

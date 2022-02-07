@@ -15,6 +15,7 @@
                       entity-manager-factory-ref="entityManagerFactory"
                       transaction-manager-ref="transactionManager"/>
 
+    <!-- EntityManagerFactory -->
     <bean name="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
         <!-- 設定 JPA 的實現類 -->
         <property name="jpaVendorAdapter">

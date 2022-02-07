@@ -1,5 +1,6 @@
 package org.example.test;
 
+import org.example.config.SpringDataJpaConfig;
 import org.example.pojo.Customer;
 import org.example.repository.CustomerRepository;
 import org.junit.Test;
@@ -12,7 +13,8 @@ import java.util.Optional;
 
 // 基於 Junit4 spring 單元測試，否則無法使用 Spring DI (@Autowired) 進行測試
 //@ContextConfiguration(locations = "/spring.xml")
-@ContextConfiguration("/spring.xml")
+//@ContextConfiguration("/spring.xml")
+@ContextConfiguration(classes = SpringDataJpaConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
 public class SpringDataJpaTest {
 	@Autowired
