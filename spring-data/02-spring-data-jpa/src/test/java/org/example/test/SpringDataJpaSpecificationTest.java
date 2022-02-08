@@ -160,7 +160,7 @@ public class SpringDataJpaSpecificationTest {
 					predicates.add(criteriaBuilder.greaterThan(custId, 0L));
 				}
 
-				if (StringUtils.isNotEmpty(param.getCustAddress())) {
+				if (StringUtils.isNotEmpty(param.getCustName())) {
 					CriteriaBuilder.In<String> in = criteriaBuilder.in(custName);
 					in.value("公孫瓚").value("劉備");
 					predicates.add(in);
@@ -217,7 +217,7 @@ public class SpringDataJpaSpecificationTest {
 					predicates.add(criteriaBuilder.greaterThan(custId, 0L));
 				}
 
-				if (StringUtils.isNotEmpty(param.getCustAddress())) {
+				if (StringUtils.isNotEmpty(param.getCustName())) {
 					CriteriaBuilder.In<String> in = criteriaBuilder.in(custName);
 					in.value("公孫瓚").value("劉備");
 					predicates.add(in);

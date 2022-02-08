@@ -513,10 +513,11 @@ public void test00() {
 
 
 
-## Lec 18、自定義操作 - QueryDsl
+## Lec 18、自定義操作 - QueryDSL
 
+- DSL means Domain Specific Language. https://discuss.elastic.co/t/what-is-dsl-stands-for-in-query-dsl/32635
+- http://querydsl.com/
 - 通過 Querydsl
-  - http://querydsl.com/
   - 通過 Specification 實現的動態條件查詢有點麻煩且可讀性不高。 QueryDsl 可讀性較佳。
   - QueryDsl 是一個獨立的第三方框架，不屬於 JPA 規範之中，也不屬於 Hibernate、Spring
   - QueryDsl是基於ORM框架或SQL平台上的一個**通用查詢框架**
@@ -612,3 +613,9 @@ public void test00() {
     
 
   - 且需要將 target/generated-sources/queries 改為 sources 目錄 IDE 才可正常編譯
+
+
+
+## Lec 20、自定義操作 - QueryDSL 動態查詢 & 原生查詢
+
+- TODO: 分組、聚合函數 一樣只能用原生 entityManger ?
