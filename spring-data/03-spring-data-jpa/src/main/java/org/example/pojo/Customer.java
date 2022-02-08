@@ -3,6 +3,7 @@ package org.example.pojo;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Data
 @Entity // 作為 hibernate 實體類
@@ -65,4 +66,12 @@ public class Customer {
 	// (TODO: 設置 mappedBy = "customer" 後，此註解應該就沒用了?)
 	@JoinColumn(name = "account_id")
 	private Account account;
+
+	/**
+	 * fetch 默認 LAZY。 優點(提高查詢性能: 避免一次查詢太多關聯屬性的資料)
+	 */
+	// 一對多
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@JoinColumn(name = "customer_id")
+	private List<Message> messages;
 }
