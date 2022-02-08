@@ -478,6 +478,15 @@ Specification<T>
 - CriteriaBuilder: 相當於 WHERE，用來設置各種條件 (>、<、IN、...)
 - Predicate (Expression): 每個查詢條件的詳細描述
 
+> #### 發現寫了過於複雜的查詢條件?
+>
+> 畢竟 Spring Data JPA 本身的定位不是為了複雜查詢而生
+> 所以我們需要因應不同業務場景來挑選對應的技術
+> 一般複雜業務場景的系統目前還是選 MyBatis，實現起來較簡單
+> 如果系統微服務之類是拆分過、較簡單的表，就不太會有太複雜的功能
+> 另外一般微服務架構下的購物網站，動態條件查詢背後也會用搜尋引擎如 Elasticsearch。
+> (如果你的程式出現過多這樣的複雜查詢的場景，說明你的技術選型錯了!)
+
 ### 限制
 
 不能實現分組、聚合函數，得自己透過 entityManger 做。
@@ -504,15 +513,102 @@ public void test00() {
 
 
 
-> #### 發現寫了過於複雜的查詢條件?
->
-> 畢竟 Spring Data JPA 本身的定位不是為了複雜查詢而生
-> 所以我們需要因應不同業務場景來挑選對應的技術
-> 一般複雜業務場景的系統目前還是選 MyBatis，實現起來較簡單
-> 如果系統微服務之類是拆分過、較簡單的表，就不太會有太複雜的功能
-> 另外一般微服務架構下的購物網站，動態條件查詢背後也會用搜尋引擎如 Elasticsearch。
-> (如果你的程式出現過多這樣的複雜查詢的場景，說明你的技術選型錯了!)
-
-
+## Lec 18、自定義操作 - QueryDsl
 
 - 通過 Querydsl
+  - http://querydsl.com/
+  - 通過 Specification 實現的動態條件查詢有點麻煩且可讀性不高。 QueryDsl 可讀性較佳。
+  - QueryDsl 是一個獨立的第三方框架，不屬於 JPA 規範之中，也不屬於 Hibernate、Spring
+  - QueryDsl是基於ORM框架或SQL平台上的一個**通用查詢框架**
+    - 可在任何支持的項目以通用的 API 方式來構建查詢
+    - 主要集成 JPA，此外也支持 JDO、SQL、MongoDB 等等
+    - 是 JPQL 和 Criteria 查詢的替代方案
+    - https://blog.csdn.net/qq_38974638/article/details/120275354
+
+- 需要另外繼承 QuerydslPredicateExecutor，但不可以去掉原本的 CrudRepository 或 PagingAndSorting
+
+- QuerydslPredicateExecutor 使用到外部依賴 com.querydsl.core 的 class，所以要另外引入依賴
+
+  ```xml
+  <querydsl.version>5.0.0</querydsl.version>
+  
+  		<dependency>
+              <groupId>com.querydsl</groupId>
+              <artifactId>querydsl-jpa</artifactId>
+              <version>${querydsl.version}</version>
+          </dependency>
+  ```
+
+  
+
+- https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#core.extensions
+
+  - 官網範例中直接使用 user.firstname 在原生 entity 是不支援的 (但官網完全沒提XD)
+
+    所以要另外引入 querydsl-apt 與 maven 插件在 <outputDirectory> 下生成 QEntity
+
+    ```xml
+            <apt.version>1.1.3</apt.version>
+            
+            <dependency>
+                <groupId>com.querydsl</groupId>
+                <artifactId>querydsl-apt</artifactId>
+                <version>${querydsl.version}</version>
+                <scope>provided</scope>
+            </dependency>
+            
+        <build>
+            <plugins>
+                <plugin>
+                    <groupId>com.mysema.maven</groupId>
+                    <artifactId>apt-maven-plugin</artifactId>
+                    <version>${apt.version}</version>
+                    <executions>
+                        <execution>
+                            <phase>generate-sources</phase>
+                            <goals>
+                                <goal>process</goal>
+                            </goals>
+                            <configuration>
+                                <outputDirectory>target/generated-sources/queries</outputDirectory>
+                                <processor>com.querydsl.apt.jpa.JPAAnnotationProcessor</processor>
+                            </configuration>
+                        </execution>
+                    </executions>
+                </plugin>
+            </plugins>
+        </build>
+    ```
+
+    
+
+  - 觸發 mvn compile 後，apt-maven-plugin 就會幫我們生成 Query Entity 到 target/generated-sources/queries 下
+
+    ```
+    [INFO] Scanning for projects...
+    [INFO] 
+    [INFO] -------------------< org.example:02-spring-data-jpa >-------------------
+    [INFO] Building 02-spring-data-jpa 1.0-SNAPSHOT
+    [INFO] --------------------------------[ jar ]---------------------------------
+    [INFO] 
+    [INFO] --- apt-maven-plugin:1.1.3:process (default) @ 02-spring-data-jpa ---
+    [INFO] 
+    [INFO] --- maven-resources-plugin:2.6:resources (default-resources) @ 02-spring-data-jpa ---
+    [WARNING] Using platform encoding (UTF-8 actually) to copy filtered resources, i.e. build is platform dependent!
+    [INFO] Copying 1 resource
+    [INFO] 
+    [INFO] --- maven-compiler-plugin:3.1:compile (default-compile) @ 02-spring-data-jpa ---
+    [INFO] Changes detected - recompiling the module!
+    [WARNING] File encoding has not been set, using platform encoding UTF-8, i.e. build is platform dependent!
+    [INFO] Compiling 8 source files to D:\Lawrence\learning\java\spring-data-jpa_tuling\spring-data\02-spring-data-jpa\target\classes
+    [INFO] ------------------------------------------------------------------------
+    [INFO] BUILD SUCCESS
+    [INFO] ------------------------------------------------------------------------
+    [INFO] Total time:  5.035 s
+    [INFO] Finished at: 2022-02-08T14:27:47+08:00
+    [INFO] ------------------------------------------------------------------------
+    ```
+
+    
+
+  - 且需要將 target/generated-sources/queries 改為 sources 目錄 IDE 才可正常編譯
