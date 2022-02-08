@@ -13,7 +13,7 @@ import java.util.List;
 
 @ContextConfiguration(classes = SpringDataJpaConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SpringDataJpaMethodNameTest {
+public class MethodNameTest {
 	/** JDK 動態代理的實例。 */
 	@Autowired
 	CustomerMethodRepository customerRepository;

@@ -17,7 +17,7 @@ import java.util.List;
 
 @ContextConfiguration(classes = SpringDataJpaConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SpringDataJpaSpecificationTest {
+public class SpecificationTest {
 	/** JDK 動態代理的實例。 */
 	@Autowired
 	CustomerSpecificationRepository customerRepository;

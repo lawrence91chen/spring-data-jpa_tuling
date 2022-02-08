@@ -21,7 +21,7 @@ import java.util.List;
 
 @ContextConfiguration(classes = SpringDataJpaConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SpringDataJpaQuerydslTest {
+public class QuerydslTest {
 	/** JDK 動態代理的實例。 */
 	@Autowired
 	CustomerQuerydslRepository customerRepository;

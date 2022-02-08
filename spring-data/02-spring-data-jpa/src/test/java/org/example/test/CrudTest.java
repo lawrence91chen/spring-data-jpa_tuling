@@ -17,7 +17,7 @@ import java.util.Optional;
 //@ContextConfiguration("/spring.xml")
 @ContextConfiguration(classes = SpringDataJpaConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SpringDataJpaTest {
+public class CrudTest {
 	/** JDK 動態代理的實例。 */
 	@Autowired
 	CustomerRepository customerRepository;

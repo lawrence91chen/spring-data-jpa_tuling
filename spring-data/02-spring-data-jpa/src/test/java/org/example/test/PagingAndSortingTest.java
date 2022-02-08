@@ -15,7 +15,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @ContextConfiguration(classes = SpringDataJpaConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SpringDataJpaPagingAndSortingTest {
+public class PagingAndSortingTest {
 	/** JDK 動態代理的實例。 */
 	@Autowired
 	CustomerRepository customerRepository;

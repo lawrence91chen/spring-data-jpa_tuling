@@ -13,7 +13,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @ContextConfiguration(classes = SpringDataJpaConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
-public class SpringDataJpaQbeTest {
+public class QbeTest {
 	/** JDK 動態代理的實例。 */
 	@Autowired
 	CustomerQbeRepository customerRepository;
