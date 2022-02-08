@@ -450,17 +450,69 @@ void deleteAll();
   - 只能實現一些簡單的查詢
   - 只支持查詢
     - 不支持嵌套或分組的屬性約束，如 firstname=?0 OR (firstname=?1 AND firstname=?2)
-    - **只支持字串** start/contains/ends/regex 匹配和其他屬性類型的精確匹配
+    - **只支持字串** start/contains/ends/regex 匹配和其他屬性類型的**精確**匹配
       - 例如有日期範圍的查詢就不能用
+      - 無法實現 `>、<、>=、<=、IN、BETWEEN` 等非精確匹配的條件查詢
       - 如果所有動態條件都只是字串，可使用 Query By Example
   - https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#query-by-example
   - 條件匹配器: https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#query-by-example.matchers
     - ExampleMatcher 中定義許多靜態方法，可以對條件進行一些行為上的設置，例如 with 開頭的
-
 - interface MatcherConfiguer<T>... 
-  - interface 如果只有一個方法通常稱為函數接口，可以結合 java 8 lamda expression 使用
+  - interface 如果只有一個方法通常稱為函數接口，可以結合 java 8 lambda expression 使用
 
-
+## Lec 19、自定義操作 - Specifications
 
 - 通過 Specifications
+  - Query By Example 只能針對字串進行條件設置，如果想支持所有類型，可使用 Specifications
+
+### 實現
+
+繼承 interface JpaSpecificationExecutor<T>
+
+
+
+Specification<T>
+
+- Root: 相當於 FROM Customer，通過 root 來獲取 `列` 的字段
+- CriteriaQuery: 查詢哪些字段，排序為何。用來組合 (ORDER BY、WHERE)
+- CriteriaBuilder: 相當於 WHERE，用來設置各種條件 (>、<、IN、...)
+- Predicate (Expression): 每個查詢條件的詳細描述
+
+### 限制
+
+不能實現分組、聚合函數，得自己透過 entityManger 做。
+
+
+
+TODO: 
+
+query 有 groupBy、multiselect 等方法，但老師卻說沒用，底層被定死。這段聽不懂
+
+toPredicate 方法中的三個參數和自己用 entityManager 取到的又有何不同?
+
+```java
+@Autowired
+EntityManager entityManager;
+
+@Test
+public void test00() {
+    CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+    CriteriaQuery<Object> query = criteriaBuilder.createQuery();
+    Root<Customer> from = query.from(Customer.class);
+}
+```
+
+
+
+> #### 發現寫了過於複雜的查詢條件?
+>
+> 畢竟 Spring Data JPA 本身的定位不是為了複雜查詢而生
+> 所以我們需要因應不同業務場景來挑選對應的技術
+> 一般複雜業務場景的系統目前還是選 MyBatis，實現起來較簡單
+> 如果系統微服務之類是拆分過、較簡單的表，就不太會有太複雜的功能
+> 另外一般微服務架構下的購物網站，動態條件查詢背後也會用搜尋引擎如 Elasticsearch。
+> (如果你的程式出現過多這樣的複雜查詢的場景，說明你的技術選型錯了!)
+
+
+
 - 通過 Querydsl
