@@ -18,4 +18,8 @@ public class Account {
 	private Long id;
 	private String username;
 	private String password;
+
+	@OneToOne
+	@JoinColumn(name = "customer_id")
+	private Customer customer;
 }

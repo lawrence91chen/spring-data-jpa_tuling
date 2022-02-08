@@ -668,4 +668,7 @@ public void test00() {
     org.springframework.dao.InvalidDataAccessApiUsageException: org.hibernate.TransientPropertyValueException: object references an unsaved transient instance - save the transient instance before flushing : org.example.pojo.Customer.account -> org.example.pojo.Account; nested exception is java.lang.IllegalStateException: org.hibernate.TransientPropertyValueException: object references an unsaved transient instance - save the transient instance before flushing : org.example.pojo.Customer.account -> org.example.pojo.Account
     ```
 
-    
+## Lec 22、多表關聯: 單向一對一
+
+## Lec 23、多表關聯: 雙向一對一
+

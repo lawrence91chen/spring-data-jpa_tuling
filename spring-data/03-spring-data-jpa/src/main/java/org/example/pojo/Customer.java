@@ -51,10 +51,18 @@ public class Customer {
 	 * orphanRemoval 關聯移除(orphan=孤兒)。通常在修改的時候會用到，一旦關聯的數據設置 null 或改為其他數據時，想刪除關聯數據，可以設置為 true。默認 false
 	 *
 	 * optional 限制關聯對象可否為 null。默認 true。
+	 *
+	 * mappedBy 將外鍵約束交給另一方維護。 (通常在雙向關聯中，會放棄一方的外鍵約束)
+	 * 	值 = 另一方關聯屬性名
+	 *
+	 * 	(否則會變成 TABLE 互有對方外鍵)
 	 */
 	// 單向關聯 一對一
-	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToOne(
+			mappedBy = "customer",
+			cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	// 設置外鍵的字段名
+	// (TODO: 設置 mappedBy = "customer" 後，此註解應該就沒用了?)
 	@JoinColumn(name = "account_id")
 	private Account account;
 }
