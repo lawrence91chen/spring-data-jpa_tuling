@@ -619,3 +619,53 @@ public void test00() {
 ## Lec 20、自定義操作 - QueryDSL 動態查詢 & 原生查詢
 
 - TODO: 分組、聚合函數 一樣只能用原生 entityManger ?
+
+
+
+## Lec 21、多表關聯: 一對一代碼搭建
+
+- JPA 多表關聯也是規範，實現依然是 Hibernate，所以這邊學的關聯操作依然是 Hibernate 的關聯操作
+- 學過 Hibernate 的基本上可以跳過，因為 Spring data JPA 在這塊基本上沒有任何擴展
+- 所以說要找一些官方說明的話就需要去 Hibernate 的官網看，Spring data JPA 官網在關聯關係沒有任何說明
+  - https://docs.jboss.org/hibernate/stable/orm/userguide/html_single/Hibernate_User_Guide.html#associations
+
+- 實際開發上肯定會涉及到許多多表關聯操作的
+  - mybatis 或 mybatis-plus 在多表關聯都需要自己寫 SQL 且定義欄位映射關係
+  - JPA/Hibernate 透過註解定義關聯關係，基本上操作主表，子表就會對應幫你做
+    - 例如 insert customer 同時會幫你 insert account
+    - 老師是說更方便，但我個人是覺得這樣 debug 更複雜啦...
+
+
+
+### 一對一
+
+- e.g 客戶表 - 帳戶表
+- 通過外鍵關聯兩表
+
+- 配置關聯關係
+
+  - Customer 中加入 Account 或 Account 中加入 Customer : 單向關聯
+
+    ```java
+    // 單向關聯 一對一
+    @OneToOne
+    // 設置外鍵的字段名
+    @JoinColumn(name = "account_id")
+    private Account account;
+    ```
+
+  - 或是兩個都加: 形成雙向關聯
+
+- 配置關聯操作
+
+  ```java
+  @OneToOne(cascade = CascadeType.PERSIST)
+  ```
+
+  - 未配置會出錯
+
+    ```java
+    org.springframework.dao.InvalidDataAccessApiUsageException: org.hibernate.TransientPropertyValueException: object references an unsaved transient instance - save the transient instance before flushing : org.example.pojo.Customer.account -> org.example.pojo.Account; nested exception is java.lang.IllegalStateException: org.hibernate.TransientPropertyValueException: object references an unsaved transient instance - save the transient instance before flushing : org.example.pojo.Customer.account -> org.example.pojo.Account
+    ```
+
+    
