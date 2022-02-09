@@ -74,4 +74,19 @@ public class Customer {
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "customer_id")
 	private List<Message> messages;
+
+	// 單向多對多
+	@ManyToMany(cascade = CascadeType.PERSIST)
+	/**
+	 * 中間表需要通過 @JoinTable 來維護外鍵 (不設置也會自動生成)
+	 * 	name 指定中間表的名稱
+	 * 	joinColumns 設置本表的外鍵名稱
+	 * 	inverseJoinColumns 設置關聯表的外鍵名稱
+	 */
+	@JoinTable(
+			name = "tb_customer_role",
+			joinColumns = {@JoinColumn(name = "c_id")},
+			inverseJoinColumns = {@JoinColumn(name = "r_id")}
+	)
+	private List<Role> roles;
 }
