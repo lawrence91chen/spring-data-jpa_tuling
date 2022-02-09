@@ -66,7 +66,7 @@ public class OneToManyTest {
 	@Transactional
 	@Commit
 	public void testU02() {
-		Optional<Customer> customer = customerRepository.findById(25L);
+		Optional<Customer> customer = customerRepository.findById(26L);
 		customer.get().setCustName("諸葛孔明");
 		// 不須調用 save 也會更新 (因為直接修改持久化數據)
 

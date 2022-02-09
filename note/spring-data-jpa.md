@@ -714,4 +714,144 @@ public void test00() {
 
       B 完成後發現 account.ver = 1 與 B.ver = 0 不符，就會拋出異常來防止併發修改。
 
-      
+## Lec 30、審計
+
+- https://docs.spring.io/spring-data/jpa/docs/current/reference/html/#auditing
+
+- database auditing
+
+  - 資料庫稽核(審計): 指在資料庫系統中，記錄使用者在何時做了那些動作，俾據以查核。
+    - https://terms.naer.edu.tw/detail/1276287/
+    - https://www.sqlshack.com/a-quick-overview-of-database-audit-in-sql/
+
+- 阿里巴巴開發手冊規定建表須定義創建者、創建時間、修改者、修改時間
+
+  - https://github.com/aihua/alibaba-p3c/blob/master/%E9%98%BF%E9%87%8C%E5%B7%B4%E5%B7%B4Java%E5%BC%80%E5%8F%91%E6%89%8B%E5%86%8C%EF%BC%88%E8%AF%A6%E5%B0%BD%E7%89%88%EF%BC%89.pdf
+
+  - https://www.w3cschool.cn/alibaba_java/
+
+    > 主要查到的資料只提到 創建時間、修改時間。
+    >
+    > 但可能是因為 阿里巴巴開發手冊 也一直在持續更新中的關係
+
+- 優點: 對於後續追朔或日誌記錄有幫助
+
+  缺點: 新增修改的操作要頻繁處理這些欄位
+
+- Spring Data JPA 提供了幫我們處理審計欄位的功能
+
+  - 配置 AuditorAware
+
+    ```java
+    /**
+     * 監聽
+     * @CreatedBy
+     * @LastModifiedBy
+     * 自動注入用戶名
+     */
+    @Configuration
+    public class UserAuditorAware implements AuditorAware<String> {
+    	@Override
+    	public Optional<String> getCurrentAuditor() {
+    		return Optional.of("admin");
+    	}
+    }
+    ```
+
+    或是
+
+    ```java
+    /**
+     * AuditorAware 作用: 返回當前用戶
+     * 泛型類型: @CreatedBy、@LastModifiedBy 屬性對應的類型
+     */
+    @Bean
+    public AuditorAware<String> auditorAware() {
+        // AuditorAware 為函數接口，直接實作匿名類。不單獨聲明一個類
+        return new AuditorAware<String>() {
+            @Override
+            public Optional<String> getCurrentAuditor() {
+                // 當前用戶，看你的應用是用什麼存的就用什麼拿
+                // e.g. Session、Redis、Spring Security、...
+                // 這邊演示先直接寫死
+                // 封裝成 Optional
+                return Optional.of("xushu");
+            }
+        };
+    }
+    ```
+
+    
+
+  - Entity 類的審計欄位加上註解
+
+    ```java
+    @EntityListeners(AuditingEntityListener.class)
+    
+    ...
+    
+    @CreatedBy
+    private String createBy;
+    
+    /** 修改者 */
+    @LastModifiedBy
+    private String modifiedBy;
+    
+    /** 建立時間 */
+    @CreatedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateCreated;
+    
+    /** 修改時間 */
+    @LastModifiedDate
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date dateModified;
+    ```
+
+    
+
+    或建立共用父類
+
+    ```java
+    @MappedSuperclass
+    @EntityListeners(AuditingEntityListener.class)
+    public class AuditEntity implements Serializable {
+    
+    	/** 建立者 */
+    	@CreatedBy
+    	private String createBy;
+    
+    	/** 修改者 */
+    	@LastModifiedBy
+    	private String modifiedBy;
+    
+    	/** 建立時間 */
+    	@CreatedDate
+    	@Temporal(TemporalType.TIMESTAMP)
+    	private Date dateCreated;
+    
+    	/** 修改時間 */
+    	@LastModifiedDate
+    	@Temporal(TemporalType.TIMESTAMP)
+    	private Date dateModified;
+    }
+    ```
+
+    
+
+  - 啟用審計 @EnableJpaAuditing
+
+    ```
+    Could not configure Spring Data JPA auditing-feature because spring-aspects.jar is not on the classpath!
+    If you want to use auditing please add spring-aspects.jar to the classpath.
+    ```
+
+    ```xml
+    <dependency>
+        <groupId>org.springframework</groupId>
+        <artifactId>spring-aspects</artifactId>
+        <version>5.3.15</version>
+    </dependency>
+    ```
+
+    

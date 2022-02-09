@@ -1,10 +1,17 @@
 package org.example.pojo;
 
 import lombok.Data;
+import org.springframework.data.annotation.CreatedBy;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedBy;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
+@EntityListeners(AuditingEntityListener.class)
 @Data
 @Entity // 作為 hibernate 實體類
 @Table(name = "tb_customer") // 映射的表名
@@ -39,6 +46,24 @@ public class Customer {
 	private String custAddress;
 
 	private @Version Long version;
+
+	/** 建立者 */
+	@CreatedBy
+	private String createBy;
+
+	/** 修改者 */
+	@LastModifiedBy
+	private String modifiedBy;
+
+	/** 建立時間 */
+	@CreatedDate
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dateCreated;
+
+	/** 修改時間 */
+	@LastModifiedDate
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date dateModified;
 
 	/**
 	 * cascade 設置關聯操作
