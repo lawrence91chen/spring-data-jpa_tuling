@@ -878,9 +878,56 @@ public void test00() {
 
 - 自己學完
   - 總結 -> 畫圖 -> 印象深刻、回顧方便
+- 源碼記關鍵點就好
 
 ### Repository 底層原理
 
 - 核心機制: 動態代理
 - 調用 JPA 的 Repository 統一實現
   - 就是去通過 JPA 的 API 完成的持久化操作
+
+## Lec 32、底層原理 - Repository 源碼
+
+> 看源碼切記 
+>
+> 1. 先關注主線
+> 2. 有時間再看細節
+>
+> 不然很容易暈 
+>
+> (跟玩遊戲一樣，先跑主線任務再刷副本XD)
+
+
+
+```
+Repository -> JdkDynamicAopProxy#invoke (JDK AOP 統一實現類)
+			-> target = SimpleJpaRepository
+```
+
+### Repository 底層原理
+
+- 核心機制: 動態代理
+
+  ```
+  JdkDynamicAopProxy#invoke
+  ```
+
+  ![image-20220209174448231](spring-data-jpa.assets/image-20220209174448231.png)
+
+- 調用 JPA 的 Repository 統一實現
+
+  ![image-20220209174655135](spring-data-jpa.assets/image-20220209174655135.png)
+
+  > 下方責任鏈非此處重點，有興趣請參考 Spring AOP 相關教程
+
+  - 就是去通過 JPA 的 API 完成的持久化操作
+
+    ```
+    SimpleJpaRepository#findById
+    ```
+
+    ![image-20220209175920297](spring-data-jpa.assets/image-20220209175920297.png)
+
+    
+
+    ![image-20220209180315340](spring-data-jpa.assets/image-20220209180315340.png)
