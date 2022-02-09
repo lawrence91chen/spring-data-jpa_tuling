@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @ContextConfiguration(classes = SpringDataJpaConfig.class)
 @RunWith(SpringJUnit4ClassRunner.class)
@@ -51,7 +52,7 @@ public class ManyToManyTest {
 	 */
 	@Test
 	@Transactional
-	@Commit // 單元測試加了 @Transactional 後就不 commit 了 (先前範例用到事務都是查詢)。
+	@Commit // 單元測試加了 @Transactional 後就不 commit 了 (先前範例用到事務都是查詢，且只有加在單元測試類上才有此特性，之前加在 Repository 上的就不會有)。
 	public void testC02() {
 		List<Role> roles = new ArrayList<>();
 		roles.add(roleRepository.findById(1L).get());
@@ -62,5 +63,29 @@ public class ManyToManyTest {
 		customer.setRoles(roles);
 
 		customerRepository.save(customer);
+	}
+
+	@Test
+	@Transactional(readOnly = true)
+	public void testR() {
+		System.out.println(customerRepository.findById(21L));
+	}
+
+	/**
+	 * 1. 注意加上 @Transactional、@Commit
+	 * 2. 多對多其實不適合刪除，因為經常出現其他數據會引用另一端。此時刪除就會: ConstraintViolationException
+	 *    要級聯刪除就要保證沒有額外其他另一端數據關聯
+	 */
+	@Test
+	@Transactional
+	@Commit
+	public void testD() {
+		// Customer 中 List<Role> roles @ManyToMany(cascade = CascadeType.ALL) 就不能刪除
+		// 但如果 cascade = CascadeType.PERSIST 則可以刪
+		// 不能刪原因是如果要連帶刪 Role 是不太合理的，因為可能會有其他人關聯同一個 Role
+		// 官網說明: 多對多刪除不適合級聯
+		// https://docs.jboss.org/hibernate/stable/orm/userguide/html_single/Hibernate_User_Guide.html#associations-many-to-many
+		Optional<Customer> customer = customerRepository.findById(24L);
+		customerRepository.delete(customer.get());
 	}
 }

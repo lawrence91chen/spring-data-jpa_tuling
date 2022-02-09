@@ -680,5 +680,11 @@ public void test00() {
 
 ## Lec 28、多表關聯: 插入已保存關聯數據
 
+## Lec 26、多表關聯: 多對多-查詢、刪除
 
+- https://docs.jboss.org/hibernate/stable/orm/userguide/html_single/Hibernate_User_Guide.html#associations-many-to-many
+
+  > For `@ManyToMany` associations, the `REMOVE` entity state transition doesn’t make sense to be cascaded because it will propagate beyond the link table. Since the other side might be referenced by other entities on the parent-side, the automatic removal might end up in a `ConstraintViolationException`.
+  >
+  > For example, if `@ManyToMany(cascade = CascadeType.ALL)` was defined and the first person would be deleted, Hibernate would throw an exception because another person is still associated with the address that’s being deleted.
 

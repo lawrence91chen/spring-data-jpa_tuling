@@ -76,7 +76,7 @@ public class Customer {
 	private List<Message> messages;
 
 	// 單向多對多
-	@ManyToMany(cascade = CascadeType.PERSIST)
+	@ManyToMany(cascade = CascadeType.ALL)
 	/**
 	 * 中間表需要通過 @JoinTable 來維護外鍵 (不設置也會自動生成)
 	 * 	name 指定中間表的名稱
