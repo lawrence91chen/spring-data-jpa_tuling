@@ -688,3 +688,30 @@ public void test00() {
   >
   > For example, if `@ManyToMany(cascade = CascadeType.ALL)` was defined and the first person would be deleted, Hibernate would throw an exception because another person is still associated with the address that’s being deleted.
 
+## Lec 29、樂觀鎖
+
+- JPA 的樂觀鎖 (Optimistic Lock) 也是屬於 Hibernate 的
+
+  > Hibernate 裡面還有其他許多知識點，樂觀鎖只是其中之一。有興趣可以再去完整學 Hibernate 
+
+- 只需要在屬性前加上 @Version 註解，實現非常簡單(P.S. 無論是在 MyBatis-plus or Hibernate)
+
+  ```java
+  private @Version Long version
+  ```
+
+- 用途: 
+
+  - 防併發修改: 防止同時有不同人(線程)對共享數據進行讀寫導致數據錯亂
+
+    - 例如一帳戶原有 1000 元，兩人同時開始提款， A 提 200 (剩餘 800)、B 提 500 (剩餘 500)，A 先完成 (更新為800) B 後完成(更新為500) 最後帳戶記載剩餘 500，A 提的 200 就丟失了
+
+  - 通常以 CAS 的機制實現，在表中加一個**版本 (version)**標記，初始是 0。操作過程中再拿出來進行比較
+
+    - A、B 開始時得到 ver=0
+
+      A 完成後發現 account.ver = A.ver = 0，將 account.ver 更新為 1。餘額更新為800
+
+      B 完成後發現 account.ver = 1 與 B.ver = 0 不符，就會拋出異常來防止併發修改。
+
+      

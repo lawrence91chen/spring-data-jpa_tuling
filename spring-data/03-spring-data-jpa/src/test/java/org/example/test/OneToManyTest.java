@@ -7,6 +7,7 @@ import org.example.repository.CustomerRepository;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.test.annotation.Commit;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import org.springframework.transaction.annotation.Transactional;
@@ -51,5 +52,25 @@ public class OneToManyTest {
 	public void testD() {
 		// TODO: select、select、update、delete、delete、delete
 		customerRepository.deleteById(17L);
+	}
+
+	@Test
+	public void testU() {
+		Customer customer = new Customer();
+		customer.setCustName("諸葛亮");
+		// save 後就會自動產生 version=0
+		customerRepository.save(customer);
+	}
+
+	@Test
+	@Transactional
+	@Commit
+	public void testU02() {
+		Optional<Customer> customer = customerRepository.findById(25L);
+		customer.get().setCustName("諸葛孔明");
+		// 不須調用 save 也會更新 (因為直接修改持久化數據)
+
+		// version 更新為 1
+		// 併發修改 demo 上較麻煩先不演示
 	}
 }

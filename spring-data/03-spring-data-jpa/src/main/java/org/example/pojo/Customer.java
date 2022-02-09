@@ -38,6 +38,8 @@ public class Customer {
 	/** 客戶地址。 */
 	private String custAddress;
 
+	private @Version Long version;
+
 	/**
 	 * cascade 設置關聯操作
 	 * 	ALL: 所有持久化操作
