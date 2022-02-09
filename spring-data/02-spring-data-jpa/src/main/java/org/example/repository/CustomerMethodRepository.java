@@ -2,8 +2,8 @@ package org.example.repository;
 
 import org.example.pojo.Customer;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
 import java.util.List;
 
 public interface CustomerMethodRepository extends PagingAndSortingRepository<Customer, Long> {
