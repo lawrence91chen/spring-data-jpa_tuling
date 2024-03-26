@@ -931,3 +931,29 @@ Repository -> JdkDynamicAopProxy#invoke (JDK AOP 統一實現類)
     
 
     ![image-20220209180315340](spring-data-jpa.assets/image-20220209180315340.png)
+
+## Lec 33、Spring 整合 JPA 原理 - 問題
+
+### 1、Spring 怎麼管理 Repository (怎麼創建 Repository 的 Bean)
+
+1. @EnableJpaRepositories(basePackages = "org.example.repository") 
+
+2.  Spring 容器啟動 (new ApplicationContext() ...) 的時候，IOC 容器加載，根據 basePackages  去創建 Bean
+
+   ```
+   // 未設置 @EnableJpaRepositories 時報錯
+   Exception in thread "main" org.springframework.beans.factory.NoSuchBeanDefinitionException: No qualifying bean of type 'org.example.repository.CustomerRepository' available
+   ```
+
+   - 沒有找到 Bean，解決思路?
+     - 應用層面: 是不是配置不正確?
+     - 底層層面: 是不是 Spring 底層掃描排除?  (Bean 實際上是一個對象實例)
+   - 解決方式:
+   - 
+
+
+
+### 2、Spring 怎麼將動態代理創建為 Bean
+
+### 3、~~事務 (需要深入理解 Spring 事務，所以不談)~~
+

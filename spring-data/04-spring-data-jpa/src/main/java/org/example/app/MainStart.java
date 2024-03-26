@@ -14,7 +14,7 @@ import java.lang.reflect.Type;
 public class MainStart {
 	public static void main(String[] args) throws ClassNotFoundException {
 		// 下面這段講解被剪掉了，只能照著先打
-		// Spring 上下文 spring 容器
+		// Spring 上下文 spring 容器 ---> IOC 加載過程: 創建所有的 Bean 包括 Repository 的 Bean
 		AnnotationConfigApplicationContext ioc = new AnnotationConfigApplicationContext(SpringDataJpaConfig.class);
 
 //		CustomerRepository repository = ioc.getBean(CustomerRepository.class);

@@ -5,7 +5,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
-import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -17,7 +16,7 @@ import javax.sql.DataSource;
 import java.util.Optional;
 
 @Configuration // 標記當前類為配置類: 表示這個 Class = XML 配置文件
-@EnableJpaRepositories(basePackages = "org.example.repository") // 啟用 spring data JPA = <jpa:repositories ...，如果該配置類沒有在最頂層需要指定 basePackages
+//@EnableJpaRepositories(basePackages = "org.example.repository") // 啟用 spring data JPA = <jpa:repositories ...，如果該配置類沒有在最頂層需要指定 basePackages
 /**
  *     <!--  事務基於註解: 啟動註解方式的聲明式事務  -->
  *     <tx:annotation-driven transaction-manager="transactionManager"></tx:annotation-driven>
